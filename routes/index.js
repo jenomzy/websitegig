@@ -11,25 +11,32 @@ router.post('/sendmessage', function (req, res) {
    var name = req.body.Name;
    var email = req.body.Email;
    var subject = req.body.Subject;
-   var message = req.body.Message;
+   var text = req.body.Message;
 
-    var smtpTransport = nodemailer.createTransport('SMTP', {
-        service: 'Outlook365',
+    var smtpTransport = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true, // use SSL
         auth: {
-            user: '!!! YOUR SENDGRID USERNAME !!!',
-            pass: '!!! YOUR SENDGRID PASSWORD !!!'
+            user: 'gigtech24@gmail.com',
+            pass: 'gimbaisaacgodwin'
         }
     });
     var mailOptions = {
         to: 'gigtech24@gmail.com',
-        from: name <email> 'from website',
+        from: name <email>'and',
         subject: subject,
-        text: message
+        text: text
     };
-    smtpTransport.sendMail(mailOptions, function(err) {
-        console.log('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
-        done(err, 'done');
+    smtpTransport.sendMail(mailOptions, function(err, info) {
+        if(err){
+            return console.log(err);
+        }
+
+        console.log('Message sent: ' + info.response);
     });
+
+    res.render('index');
 });
 
 module.exports = router;
